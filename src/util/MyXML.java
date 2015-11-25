@@ -41,22 +41,25 @@ public abstract class MyXML {
          return getSubElements(ele, tagName).get(0);
      }
      
+     // If more than one has tagName, complain OR just pick the first one.
+     static boolean COMPLAIN_IF_AMBIGUOUS = false;
+     
      public static String getStringContent(Element ele, String tagName){
 
          String stringCont = "";
          
          try {
              NodeList nl = ele.getElementsByTagName(tagName);
-             if (nl != null && nl.getLength() > 0)
+             if (nl != null && nl.getLength() == 0)
                  throw new Exception("Expected subelement(s), none found.");
+             if (COMPLAIN_IF_AMBIGUOUS && nl.getLength() != 1)
+                 throw new Exception("Ambiguous tag name: more than one found.");
 
-             for (int i = 0; i < nl.getLength(); i++){
-                 eleList.add((Element)nl.item(0));
-             }
+             stringCont = nl.item(0).getTextContent();
          } catch (Exception e) {
              e.printStackTrace(System.err);
          }
 
-         return eleList;
+         return stringCont;
      }
 }

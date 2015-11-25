@@ -20,10 +20,9 @@ public class ProblemInstance {
    int doublePrecision, ignoredDigits;
    DistanceMatrix distanceMatrix;
 
-   
-   public ProblemInstance(DistanceMatrix distanceMatrix){
-       this.distanceMatrix = distanceMatrix;
-       this.name = "Name";
+   public ProblemInstance(File file){
+       Document dom = this.parseXML(file);
+       parseDocument(dom);
    }
    
    public Document parseXML(File file){
@@ -59,21 +58,20 @@ public class ProblemInstance {
            description = nl.item(0).getTextContent();
        }
        
-       nl= docEle.getElementsByTagName("description");
+       nl= docEle.getElementsByTagName("doublePrecision");
        if (nl != null && nl.getLength() > 0){
            doublePrecision = Integer.parseInt(nl.item(0).getTextContent());
        }
        
-       nl= docEle.getElementsByTagName("description");
+       nl= docEle.getElementsByTagName("ignoredDigits");
        if (nl != null && nl.getLength() > 0){
-           doublePrecision = Integer.parseInt(nl.item(0).getTextContent());
+           ignoredDigits = Integer.parseInt(nl.item(0).getTextContent());
        }
        
        nl = docEle.getElementsByTagName("graph");
        if (nl != null && nl.getLength() > 0){
            Element el = (Element)nl.item(0);
            distanceMatrix = parseGraph(el);
-       }
        }
    }
    
@@ -86,6 +84,14 @@ public class ProblemInstance {
        return new DistanceMatrix(1);
    }
    
-   // TODO
-   // private getSubStringFromElement()
+   public String toString(){
+       String str = "";
+       str += String.format("name: %s %n", this.name);
+       str += String.format("source: %s %n", this.source);
+       str += String.format("description: %s %n", this.description);
+       str += String.format("doublePrecision: %d %n", this.doublePrecision);
+       str += String.format("ignoredDigits: %d %n", this.ignoredDigits);
+       str += String.format("distanceMatrix: %n %s", this.distanceMatrix.toString());
+       return str;
+   }
 }
