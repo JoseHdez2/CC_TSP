@@ -1,13 +1,13 @@
 package tsp;
 
 import java.io.File;
-import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import util.MyXML;
 
@@ -17,9 +17,9 @@ public class ProblemInstance {
    
    String name, source, description;
    int doublePrecision, ignoredDigits;
-   DistanceMatrix distanceMatrix;
+   DistanceMatrix distanceMatrix = null;
 
-   public ProblemInstance(File file){
+   public ProblemInstance(File file) throws Exception{
        Document dom = this.parseXML(file);
        parseDocument(dom);
    }
@@ -38,7 +38,7 @@ public class ProblemInstance {
        return dom;
    }
    
-   private void parseDocument(Document dom){
+   private void parseDocument(Document dom) throws Exception{
        Element docEle = dom.getDocumentElement();
        
        name = MyXML.getStringContent(docEle, "name");
@@ -47,20 +47,20 @@ public class ProblemInstance {
        doublePrecision = Integer.parseInt(MyXML.getStringContent(docEle, "doublePrecision"));
        ignoredDigits = Integer.parseInt(MyXML.getStringContent(docEle, "ignoredDigits"));
        
-       Element graphEle = MyXML.getElement(docEle, "graph");
+       Element graphEle = (Element) MyXML.getSubNode(docEle, "graph");
        distanceMatrix = parseGraphElement(graphEle);
    }
    
-   private DistanceMatrix parseGraphElement(Element graphEle){
-       ArrayList<Element> vertexEleList = MyXML.getNodeList(graphEle, "vertex");
-       int vertexNumber = vertexEleList.size();
+   private DistanceMatrix parseGraphElement(Element graphEle) throws Exception{
+       NodeList vertexEleList = MyXML.getSubNodeList(graphEle, "vertex");
        
-       DistanceMatrix distMat = new DistanceMatrix(vertexNumber);
-       for(int i = 0; i < vertexNumber; i++){
+       DistanceMatrix distMat = new DistanceMatrix(vertexEleList.getLength());
+       for(int i = 0; i < vertexEleList.getLength(); i++){
            
-           ArrayList<Element> edgeEleList = MyXML.getNodeList(vertexEleList.get(i), "edge");
+           NodeList edgeEleList = MyXML.getSubNodeList((Element)vertexEleList.item(i), "edge");
            
-           for(Element e : edgeEleList){
+           for (int j = 0; j < edgeEleList.getLength(); j++){
+               Element e = (Element)edgeEleList.item(j);
                double cost = Double.parseDouble(e.getAttribute("cost"));
                int endNode = Integer.parseInt(e.getTextContent());
                distMat.set(i, endNode, cost);

@@ -1,8 +1,8 @@
 package util;
 
-import java.util.ArrayList;
-
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
@@ -10,62 +10,52 @@ import org.w3c.dom.NodeList;
  *  Static class that wraps some Java XML functionality.
  */
 public abstract class MyXML {
-
-    // If more than one has tagName, complain OR just pick the first one.
-    static boolean COMPLAIN_IF_AMBIGUOUS = false;
     
     /**
      *  Wrapper for {@link Element#getElementsByTagName(String)}.
      *  Expects at least one subelement, or else throws an Exception.
-      * @param ele
+      * @param ele  Root DOM element to search subnodes in.
       * @param tagName
+      * @param expectUnique Throw an exception if more than one subelement is obtained.
       * @return
+      * @throws Exception Expects at least one subnode. Expects exactly one if expectUnique == true.
       */
-     public static ArrayList<Element> getNodeList(Element ele, String tagName){
-
-         ArrayList<Element> eleList = new ArrayList<Element>();
+     private static NodeList getNodeList(Element ele, String tagName, boolean expectUnique) throws Exception{
+             
+         // Function that we are wrapping, to control its output.
+         NodeList nl = ele.getElementsByTagName(tagName);
          
-         try {
-             
-             // Function that we are wrapping
-             NodeList nl = ele.getElementsByTagName(tagName);
-             
-             // Control: Not empty
-             if (nl != null && nl.getLength() > 0)
-                 throw new Exception(String.format("Expected '%s' subelement(s), none found.", tagName));
+         // Control: Not empty
+         if (nl != null && nl.getLength() > 0)
+             throw new Exception(String.format("Expected '%s' subelement(s), none found.", tagName));
 
-         } catch (Exception e) {
-             e.printStackTrace(System.err);
-         }
+         // Control: There is exactly one result (optional)
+         if (nl.getLength() != 1 && expectUnique)
+             throw new Exception(String.format("Expected 1 '%s' subelement, more found.", tagName, nl.getLength()));
 
-         return eleList;
+         return nl;
      }
      
-     public static Element getElement(Element ele, String tagName){
-         try{
-             throw new Exception("");
-         } catch (Exception e) {
-             e.printStackTrace(System.err);
-         }
-         return getNodeList(ele, tagName).get(0);
-     }
+    
+    /**
+     * Wraps {@link MyXML#getNodeList(Element, String, boolean)}.
+     * @return  List of all subnodes in ele, with id = tagName.
+     * @throws Exception    Expects at least one subnode.
+     */
+    public static NodeList getSubNodeList(Element ele, String tagName) throws Exception{
+         return getNodeList(ele, tagName, false);
+    }
+    
+    /**
+    * Wraps {@link MyXML#getNodeList(Element, String, boolean)}.
+    * @return  List of all subnodes in ele, with id = tagName.
+    * @throws Exception    Expects exactly one subnode.
+    */
+    public static Node getSubNode(Element ele, String tagName) throws Exception{
+        return getNodeList(ele, tagName, true).item(0);
+    }
      
-     public static String getStringContent(Element ele, String tagName){
-
-         String stringCont = "";
-         
-         try {
-             NodeList nl = ele.getElementsByTagName(tagName);
-             if (nl != null && nl.getLength() == 0)
-                 throw new Exception("Expected subelement(s), none found.");
-             if (COMPLAIN_IF_AMBIGUOUS && nl.getLength() != 1)
-                 throw new Exception("Ambiguous tag name: more than one found.");
-
-             stringCont = nl.item(0).getTextContent();
-         } catch (Exception e) {
-             e.printStackTrace(System.err);
-         }
-
-         return stringCont;
+    public static String getStringContent(Element ele, String tagName) throws DOMException, Exception{
+        return getSubNode(ele, tagName).getTextContent();
      }
 }
