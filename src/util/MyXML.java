@@ -10,6 +10,9 @@ import org.w3c.dom.NodeList;
  *  Static class that wraps some Java XML functionality.
  */
 public abstract class MyXML {
+
+    // If more than one has tagName, complain OR just pick the first one.
+    static boolean COMPLAIN_IF_AMBIGUOUS = false;
     
     /**
      *  Wrapper for {@link Element#getElementsByTagName(String)}.
@@ -18,18 +21,19 @@ public abstract class MyXML {
       * @param tagName
       * @return
       */
-     public static ArrayList<Element> getSubElements(Element ele, String tagName){
+     public static ArrayList<Element> getNodeList(Element ele, String tagName){
 
          ArrayList<Element> eleList = new ArrayList<Element>();
          
          try {
+             
+             // Function that we are wrapping
              NodeList nl = ele.getElementsByTagName(tagName);
+             
+             // Control: Not empty
              if (nl != null && nl.getLength() > 0)
-                 throw new Exception("Expected subelement(s), none found.");
+                 throw new Exception(String.format("Expected '%s' subelement(s), none found.", tagName));
 
-             for (int i = 0; i < nl.getLength(); i++){
-                 eleList.add((Element)nl.item(0));
-             }
          } catch (Exception e) {
              e.printStackTrace(System.err);
          }
@@ -38,11 +42,13 @@ public abstract class MyXML {
      }
      
      public static Element getElement(Element ele, String tagName){
-         return getSubElements(ele, tagName).get(0);
+         try{
+             throw new Exception("");
+         } catch (Exception e) {
+             e.printStackTrace(System.err);
+         }
+         return getNodeList(ele, tagName).get(0);
      }
-     
-     // If more than one has tagName, complain OR just pick the first one.
-     static boolean COMPLAIN_IF_AMBIGUOUS = false;
      
      public static String getStringContent(Element ele, String tagName){
 

@@ -8,7 +8,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 import util.MyXML;
 
@@ -25,7 +24,7 @@ public class ProblemInstance {
        parseDocument(dom);
    }
    
-   public Document parseXML(File file){
+   private Document parseXML(File file){
        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
        Document dom = null;
        
@@ -42,46 +41,36 @@ public class ProblemInstance {
    private void parseDocument(Document dom){
        Element docEle = dom.getDocumentElement();
        
-       NodeList nl;
-       nl= docEle.getElementsByTagName("name");
-       if (nl != null && nl.getLength() > 0){
-           name = nl.item(0).getTextContent();
-       }
+       name = MyXML.getStringContent(docEle, "name");
+       source = MyXML.getStringContent(docEle, "source");
+       description = MyXML.getStringContent(docEle, "description");
+       doublePrecision = Integer.parseInt(MyXML.getStringContent(docEle, "doublePrecision"));
+       ignoredDigits = Integer.parseInt(MyXML.getStringContent(docEle, "ignoredDigits"));
        
-       nl= docEle.getElementsByTagName("source");
-       if (nl != null && nl.getLength() > 0){
-           source = nl.item(0).getTextContent();
-       }
-       
-       nl= docEle.getElementsByTagName("description");
-       if (nl != null && nl.getLength() > 0){
-           description = nl.item(0).getTextContent();
-       }
-       
-       nl= docEle.getElementsByTagName("doublePrecision");
-       if (nl != null && nl.getLength() > 0){
-           doublePrecision = Integer.parseInt(nl.item(0).getTextContent());
-       }
-       
-       nl= docEle.getElementsByTagName("ignoredDigits");
-       if (nl != null && nl.getLength() > 0){
-           ignoredDigits = Integer.parseInt(nl.item(0).getTextContent());
-       }
-       
-       nl = docEle.getElementsByTagName("graph");
-       if (nl != null && nl.getLength() > 0){
-           Element el = (Element)nl.item(0);
-           distanceMatrix = parseGraph(el);
-       }
+       Element graphEle = MyXML.getElement(docEle, "graph");
+       distanceMatrix = parseGraphElement(graphEle);
    }
    
-   private DistanceMatrix parseGraph(Element graphEle){
-       ArrayList<Element> eleVertices = MyXML.getSubElements(graphEle, "vertex");
-       for(int i = 0; i < eleVertices.size(); i++){
-           Element el = eleVertices.get(i);
-           distanceMatrix = parseGraph(el);
+   private DistanceMatrix parseGraphElement(Element graphEle){
+       ArrayList<Element> vertexEleList = MyXML.getNodeList(graphEle, "vertex");
+       int vertexNumber = vertexEleList.size();
+       
+       DistanceMatrix distMat = new DistanceMatrix(vertexNumber);
+       for(int i = 0; i < vertexNumber; i++){
+           
+           ArrayList<Element> edgeEleList = MyXML.getNodeList(vertexEleList.get(i), "edge");
+           
+           for(Element e : edgeEleList){
+               double cost = Double.parseDouble(e.getAttribute("cost"));
+               int endNode = Integer.parseInt(e.getTextContent());
+               distMat.set(i, endNode, cost);
+           }
+           
+           // Whatever the value, exist or not: set self distance to zero.
+           distMat.set(i, i, 0);
+           
        }
-       return new DistanceMatrix(1);
+       return distMat;
    }
    
    public String toString(){
