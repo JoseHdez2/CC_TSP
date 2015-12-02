@@ -24,9 +24,10 @@ public abstract class MyXML {
              
          // Function that we are wrapping, to control its output.
          NodeList nl = ele.getElementsByTagName(tagName);
+         System.out.println(nl.item(0).getTextContent());
          
          // Control: Not empty
-         if (nl != null && nl.getLength() > 0)
+         if (nl == null || nl.getLength() == 0)
              throw new Exception(String.format("Expected '%s' subelement(s), none found.", tagName));
 
          // Control: There is exactly one result (optional)
@@ -35,7 +36,6 @@ public abstract class MyXML {
 
          return nl;
      }
-     
     
     /**
      * Wraps {@link MyXML#getNodeList(Element, String, boolean)}.
