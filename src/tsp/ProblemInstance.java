@@ -10,6 +10,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import util.MyXML;
+import util.Sys;
 
 public class ProblemInstance {
    
@@ -51,11 +52,21 @@ public class ProblemInstance {
        distanceMatrix = parseGraphElement(graphEle);
    }
    
+   /**
+   * Matrix size after which matrix-reading progress is shown (since it will take a non-trivial amount of time).
+   */
+   static int MATRIX_SIZE_OUTPUT_THRESHOLD = 20;
+   
    private DistanceMatrix parseGraphElement(Element graphEle) throws Exception{
        NodeList vertexEleList = MyXML.getSubNodeList(graphEle, "vertex");
        
        DistanceMatrix distMat = new DistanceMatrix(vertexEleList.getLength());
+       
+       boolean showReadProgress = (vertexEleList.getLength() > MATRIX_SIZE_OUTPUT_THRESHOLD) ? true : false;
+       
        for(int i = 0; i < vertexEleList.getLength(); i++){
+           
+           if (showReadProgress) Sys.fout("Reading vertex %d of %d", i+1, vertexEleList.getLength());
            
            NodeList edgeEleList = MyXML.getSubNodeList((Element)vertexEleList.item(i), "edge");
            

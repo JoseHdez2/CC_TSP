@@ -24,7 +24,6 @@ public abstract class MyXML {
              
          // Function that we are wrapping, to control its output.
          NodeList nl = ele.getElementsByTagName(tagName);
-         System.out.println(nl.item(0).getTextContent());
          
          // Control: Not empty
          if (nl == null || nl.getLength() == 0)
