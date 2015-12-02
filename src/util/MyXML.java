@@ -27,11 +27,11 @@ public abstract class MyXML {
          
          // Control: Not empty
          if (nl == null || nl.getLength() == 0)
-             throw new Exception(String.format("Expected '%s' subelement(s), none found.", tagName));
+             Sys.exception("Expected '%s' subelement(s), none found.", tagName);
 
          // Control: There is exactly one result (optional)
          if (nl.getLength() != 1 && expectUnique)
-             throw new Exception(String.format("Expected 1 '%s' subelement, more found.", tagName, nl.getLength()));
+             Sys.exception("Expected 1 '%s' subelement, more found.", tagName, nl.getLength());
 
          return nl;
      }
