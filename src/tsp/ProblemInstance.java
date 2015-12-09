@@ -50,6 +50,8 @@ public class ProblemInstance {
        
        Element graphEle = (Element) MyXML.getSubNode(docEle, "graph");
        distanceMatrix = parseGraphElement(graphEle);
+       
+       if (distanceMatrix.width() <= 1) Sys.exception("Matrix must have 2 or more nodes.");
    }
    
    /**
@@ -94,4 +96,32 @@ public class ProblemInstance {
        str += String.format("distanceMatrix: %n %s", this.distanceMatrix.toString());
        return str;
    }
+
+   /*
+    *  Getters.
+    */
+   
+public String getName() {
+    return name;
+}
+
+public String getSource() {
+    return source;
+}
+
+public String getDescription() {
+    return description;
+}
+
+public int getDoublePrecision() {
+    return doublePrecision;
+}
+
+public int getIgnoredDigits() {
+    return ignoredDigits;
+}
+
+public DistanceMatrix getDistanceMatrix() {
+    return distanceMatrix;
+}
 }

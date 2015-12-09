@@ -37,7 +37,7 @@ public class DistanceMatrix {
         
         for (int j = 0; j < this.height(); j++){
             for (int i = 0; i < this.width(); i++){
-                str += String.format("%5f ", this.get(i,j));
+                str += String.format("%5.5f ", this.get(i,j));
             }
             str += "\n";
         }

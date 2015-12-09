@@ -1,15 +1,14 @@
 package main;
 
-import java.io.File;
-
-import tsp.ProblemInstance;
+import tsp.TSP;
 
 public class Main {
     public static void main(String[] args) {
         try{
             System.out.println("Traveling Salesman Problem");
-            ProblemInstance pi = new ProblemInstance(new File("samples/a280.xml"));
-            System.out.println(pi);
+            TSP tsp = new TSP("samples/a280.xml");
+            // System.out.println(tsp);
+            
         } catch (Exception e) {
             e.printStackTrace(System.err);
         }
