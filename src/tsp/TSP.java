@@ -3,6 +3,7 @@ package tsp;
 import java.io.File;
 
 import tsp.typedef.Tour;
+import util.Sys;
 
 public class TSP {
     
@@ -19,7 +20,12 @@ public class TSP {
         bestTour = new Tour();
         bestValue4bestTour = Math.pow(1, 100);
         System.out.println("Tudo bem");
-        System.out.println(NN_Algorithm());
+        Tour t = NN_Algorithm();
+        Sys.outLn(t, t.getTotalCost());
+        Tour p = new Tour();
+        p.add(0);
+        double optimistic = Prim.PrimHeuristic(p, prob.getDistanceMatrix());
+        System.out.println(optimistic);
     }
     
     /**
@@ -27,43 +33,35 @@ public class TSP {
      */
     protected Tour NN_Algorithm(){
         DistanceMatrix dm = prob.getDistanceMatrix();
+        Tour initialFeasibleTour = new Tour();
         
         int FIRST_NODE = 0;
-        bestTour.addNode(FIRST_NODE, 0.0);
+        initialFeasibleTour.addNode(FIRST_NODE, 0.0);
         
         Integer latestNode = FIRST_NODE;
         
-        // Stop when we reach the first node (for the second time!)
-        while (latestNode != FIRST_NODE && bestTour.size() > 1 || bestTour.size() == 1){
+        // Keep adding nodes until the tour is closed.
+        while (!initialFeasibleTour.isClosedTour()){
             Integer closestNewNode = null;
             double closestNewNodeDistance = Double.MAX_VALUE;
             
-            // Find new (not in tour) node that is the closest to the latest node in the tour.
-            for (int i = 0; i < dm.width(); i++){
-                if(bestTour.contains(i)) continue;  // Skip nodes already in the tour.
-                
-                // If this new node is closer, set as closest new node.
-                Double dist = dm.get(latestNode, i);
-                if (dist < closestNewNodeDistance){
-                    closestNewNode = i;
-                    closestNewNodeDistance = dist;
-                }
-            }
+            // Find new (not in tour) node that is the closest to the latest node added into the tour.
+            closestNewNode = Manager.closestNodeNotInTour(initialFeasibleTour, initialFeasibleTour.getLastNode(), dm);
             
-            // Means we exhausted all new nodes.
-            // We "forcibly" close the loop; the first node need not be neither close nor new.
+            // true means we exhausted all new nodes.
+            // So we "forcibly" close the loop; the first node need not be neither close (and is not new).
             if (closestNewNode == null){
                 closestNewNode = FIRST_NODE;
                 closestNewNodeDistance = dm.get(latestNode, FIRST_NODE);
             }
             
-            bestTour.addNode(closestNewNode, closestNewNodeDistance);
+            initialFeasibleTour.addNode(closestNewNode, closestNewNodeDistance);
             
             // We set the recently added node as the latest node in the tour, for a new iteration.
             latestNode = closestNewNode;
         }
         
-        return bestTour;
+        return initialFeasibleTour;
     }
     
     /**
