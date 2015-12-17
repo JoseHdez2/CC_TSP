@@ -2,7 +2,9 @@ package tsp;
 
 import java.io.File;
 
+import tsp.algo.Prim;
 import tsp.typedef.Tour;
+import tsp.typedef.TourManager;
 import util.Sys;
 
 public class TSP {
@@ -20,12 +22,15 @@ public class TSP {
         bestTour = new Tour();
         bestValue4bestTour = Math.pow(1, 100);
         System.out.println("Tudo bem");
+    }
+    
+    public void doThing() throws Exception{
         Tour t = NN_Algorithm();
         Sys.outLn(t, t.getTotalCost());
         Tour p = new Tour();
         p.add(0);
-        double optimistic = Prim.PrimHeuristic(p, prob.getDistanceMatrix());
-        System.out.println(optimistic);
+        double primResult = Prim.PrimHeuristic(p, prob.getDistanceMatrix());
+        Sys.out("Prim Result = ", primResult);
     }
     
     /**
@@ -46,15 +51,18 @@ public class TSP {
             double closestNewNodeDistance = Double.MAX_VALUE;
             
             // Find new (not in tour) node that is the closest to the latest node added into the tour.
-            closestNewNode = Manager.closestNodeNotInTour(initialFeasibleTour, initialFeasibleTour.getLastNode(), dm);
+            closestNewNode = TourManager.closestNodeNotInTour(initialFeasibleTour, initialFeasibleTour.getLastNode(), dm);
             
             // true means we exhausted all new nodes.
             // So we "forcibly" close the loop; the first node need not be neither close (and is not new).
             if (closestNewNode == null){
                 closestNewNode = FIRST_NODE;
                 closestNewNodeDistance = dm.get(latestNode, FIRST_NODE);
+            } else {
+                closestNewNodeDistance = dm.get(initialFeasibleTour.getLastNode(), closestNewNode);
             }
             
+            Sys.fout("closestNode:%s, closestNewNodeDistance:%s", closestNewNode, closestNewNodeDistance);
             initialFeasibleTour.addNode(closestNewNode, closestNewNodeDistance);
             
             // We set the recently added node as the latest node in the tour, for a new iteration.

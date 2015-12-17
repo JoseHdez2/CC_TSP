@@ -1,6 +1,8 @@
-package tsp;
+package tsp.algo;
 
+import tsp.DistanceMatrix;
 import tsp.typedef.Tour;
+import tsp.typedef.TourManager;
 import util.Sys;
 
 
@@ -17,7 +19,7 @@ public abstract class Prim {
      */
     static public double PrimHeuristic(Tour incompleteTour, DistanceMatrix dm) throws Exception{
         
-        while (!Manager.allNodesInTour(incompleteTour,dm)){
+        while (!TourManager.allNodesInTour(incompleteTour,dm)){
             incompleteTour = PrimStep(incompleteTour, dm);
         }
         
@@ -36,7 +38,7 @@ public abstract class Prim {
         
         // Use each node as pivot to look for closest nodes.
         for (int i = 0; i < incompleteTour.size(); i++){
-            Integer closestNodeToPivot = Manager.closestNodeNotInTour(incompleteTour, i, dm);
+            Integer closestNodeToPivot = TourManager.closestNodeNotInTour(incompleteTour, i, dm);
             double closestDistanceToPivot = 0.0;
             if (closestNodeToPivot != null){
                 closestDistanceToPivot = dm.get(i, closestNodeToPivot);

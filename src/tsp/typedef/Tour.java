@@ -5,6 +5,17 @@ import java.util.ArrayList;
 public class Tour extends ArrayList<Integer>{
     ArrayList<Double> costs = new ArrayList<Double>();
     
+    public Tour(){
+        super();
+    }
+    
+    /** Copy constructor */
+    public Tour(Tour other){
+        super();
+        this.addAll(other);
+        costs.addAll(other.costs);
+    }
+    
     public double getTotalCost(){
         Double totalCost = 0.0;
         for (Double c : costs){

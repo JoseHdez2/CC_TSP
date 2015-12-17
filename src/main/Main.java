@@ -7,7 +7,7 @@ public class Main {
         try{
             System.out.println("Traveling Salesman Problem");
             TSP tsp = new TSP("samples/a280.xml");
-            // System.out.println(tsp);
+            tsp.doThing();
             
         } catch (Exception e) {
             e.printStackTrace(System.err);

@@ -1,8 +1,8 @@
-package tsp;
+package tsp.typedef;
 
-import tsp.typedef.Tour;
+import tsp.DistanceMatrix;
 
-public abstract class Manager {
+public abstract class TourManager {
     /**
      * @param tour
      * @param dm
