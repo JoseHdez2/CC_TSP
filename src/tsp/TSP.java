@@ -21,7 +21,7 @@ public class TSP {
         prob = new ProblemInstance(new File(inputFilePath));
         bestTour = new Tour();
         bestValue4bestTour = Math.pow(1, 100);
-        System.out.println("Tudo bem");
+        Sys.out("Problem loaded.");
     }
     
     public void doThing() throws Exception{
@@ -31,6 +31,7 @@ public class TSP {
         p.add(0);
         double primResult = Prim.PrimHeuristic(p, prob.getDistanceMatrix());
         Sys.out("Prim Result = ", primResult);
+        Sys.out(p);
     }
     
     /**
