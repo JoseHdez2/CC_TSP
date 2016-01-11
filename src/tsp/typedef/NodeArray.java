@@ -2,15 +2,17 @@ package tsp.typedef;
 
 import java.util.ArrayList;
 
-public class Tour extends ArrayList<Integer>{
+import tsp.DistanceMatrix;
+
+public class NodeArray extends ArrayList<Integer>{
     ArrayList<Double> costs = new ArrayList<Double>();
     
-    public Tour(){
+    public NodeArray(){
         super();
     }
     
     /** Copy constructor */
-    public Tour(Tour other){
+    public NodeArray(NodeArray other){
         super();
         this.addAll(other);
         costs.addAll(other.costs);
@@ -42,5 +44,19 @@ public class Tour extends ArrayList<Integer>{
         // Return false if first and last nodes don't match.
         if (this.getLastNode() != this.get(0)) return false;
         return true;
+    }
+    
+    static public NodeArray nodesNotInTour(NodeArray nodeArray, DistanceMatrix dm){
+        
+        // Get all nodes in tour.
+        NodeArray allNodes = new NodeArray();
+        for(int i = 0; i < dm.width(); i++) allNodes.add(i);
+        
+        // Discard those not in tour.
+        NodeArray notInTour = new NodeArray(allNodes);
+        for (int i = 0; i < nodeArray.size(); i++) notInTour.remove(i);
+        // Tour notInTour = CollectionUtils.substract(allNodes, tour);
+        
+        return notInTour;
     }
 }

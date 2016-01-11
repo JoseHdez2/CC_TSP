@@ -3,14 +3,14 @@ package tsp;
 import java.io.File;
 
 import tsp.algo.Prim;
-import tsp.typedef.Tour;
-import tsp.typedef.TourManager;
+import tsp.typedef.NodeArray;
+import tsp.typedef.NodeArray;
 import util.Sys;
 
 public class TSP {
     
     ProblemInstance prob;
-    Tour bestTour;
+    NodeArray bestTour;
     double bestValue4bestTour;
     
     public TSP(String inputFilePath) throws Exception{
@@ -19,15 +19,15 @@ public class TSP {
     
     public void loadInput(String inputFilePath) throws Exception{
         prob = new ProblemInstance(new File(inputFilePath));
-        bestTour = new Tour();
+        bestTour = new NodeArray();
         bestValue4bestTour = Math.pow(1, 100);
         Sys.out("Problem loaded.");
     }
     
     public void doThing() throws Exception{
-        Tour t = NN_Algorithm();
+        NodeArray t = NN_Algorithm();
         Sys.outLn(t, t.getTotalCost());
-        Tour p = new Tour();
+        NodeArray p = new NodeArray();
         p.add(0);
         double primResult = Prim.PrimHeuristic(p, prob.getDistanceMatrix());
         Sys.out("Prim Result = ", primResult);
@@ -37,9 +37,9 @@ public class TSP {
     /**
      * Construction algorithm
      */
-    protected Tour NN_Algorithm(){
+    protected NodeArray NN_Algorithm(){
         DistanceMatrix dm = prob.getDistanceMatrix();
-        Tour initialFeasibleTour = new Tour();
+        NodeArray initialFeasibleTour = new NodeArray();
         
         int FIRST_NODE = 0;
         initialFeasibleTour.addNode(FIRST_NODE, 0.0);

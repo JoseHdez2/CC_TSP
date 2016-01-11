@@ -3,8 +3,8 @@ package tsp.algo;
 import java.util.ArrayList;
 
 import tsp.DistanceMatrix;
-import tsp.typedef.Tour;
-import tsp.typedef.TourManager;
+import tsp.typedef.NodeArray;
+import tsp.typedef.NodeArray;
 import util.Sys;
 
 
@@ -19,7 +19,7 @@ public abstract class Prim {
      * @return
      * @throws Exception
      */
-    static public double PrimHeuristic(Tour incompleteTour, DistanceMatrix dm) throws Exception{
+    static public double PrimHeuristic(NodeArray incompleteTour, DistanceMatrix dm) throws Exception{
         
         while (!TourManager.areAllNodesInTour(incompleteTour,dm)){
             incompleteTour = PrimStep(incompleteTour, dm);
@@ -34,7 +34,7 @@ public abstract class Prim {
      * @return
      * @throws Exception If no new nodes exist.
      */
-    static protected Tour PrimStep(Tour incompleteTour, DistanceMatrix dm) throws Exception{
+    static protected NodeArray PrimStep(NodeArray incompleteTour, DistanceMatrix dm) throws Exception{
         
         ArrayList<Object> closestNodeResults = closestNodeNotInTour(incompleteTour, dm); 
         
@@ -51,21 +51,21 @@ public abstract class Prim {
     /**
      * Find new (not in tour) node that is the closest to any node in the tour.
      * NOTE: Returns null if no new nodes are available.
-     * @param tour
+     * @param nodeArray
      * @param pivotNode Provided node against which 
      * @param dm
      * @return ArrayList: 1st element is index of node (Integer), 2nd element is distance (Float).
      */
-    static public ArrayList<Object> closestNodeNotInTour(Tour tour, DistanceMatrix dm){
+    static public ArrayList<Object> closestNodeNotInTour(NodeArray nodeArray, DistanceMatrix dm){
         
         // Group nodes that are not in the tour.
-        Tour notInTour = TourManager.nodesNotInTour(tour, dm);
+        NodeArray notInTour = TourManager.nodesNotInTour(nodeArray, dm);
         
         Integer closestNewNode = null;
         double closestNewNodeDistance = Double.MAX_VALUE;
         
         // For each node IN the tour...
-        for (int i = 0; i < tour.size(); i++){
+        for (int i = 0; i < nodeArray.size(); i++){
             String str = "Closest node to " + i + " (in tour)...";
             
             // Find closest node NOT in tour
