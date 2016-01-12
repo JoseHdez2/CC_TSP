@@ -43,6 +43,11 @@ public class Solver extends SolverHelper {
         
         while(!hasAllNodes(it)){
             addNodeClosestToAny(it);
+            System.out.println(it.size());
+            if (it.size() > 279) {
+                System.out.println("test");
+                continue;
+            }
         }
         
         return it.getTotalCost();

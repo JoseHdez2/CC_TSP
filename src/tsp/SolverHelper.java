@@ -66,14 +66,16 @@ public class SolverHelper {
         Integer cuOverall = null;   // "Closest unvisited overall" overall = to any node.
         Double cuOverallDist = Double.MAX_VALUE;
         for (int i = 0; i < dm.width(); i++){
-            Sys.out(i);
+            // Sys.out(i);
             Integer cuToI = findClosestUnvisited(na, i); // "Closest unvisited to i", i is current node.
             if (dm.get(i, cuToI) < cuOverallDist){
                 cuOverall = findClosestUnvisited(na, i);
                 cuOverallDist = dm.get(i, cuToI);
             }
         }
+//        Sys.fout("Adding %d, which is closest overall to %d, with distance %f",cuOverall, na.getLastNode(), dm.get(na.getLastNode(), cuOverall));
         na.addNode(cuOverall, dm.get(na.getLastNode(), cuOverall));
+        
     }
     
     // Used in branch and bound to create initial branch

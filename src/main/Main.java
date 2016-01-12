@@ -22,6 +22,8 @@ public class Main {
             e.printStackTrace(System.err);
         }
         
+//         System.out.println(prob.getDistanceMatrix());
+        
         // Solve problem
         Solver s = new Solver(prob.getDistanceMatrix());
         NodeArray bestTour = s.solve();
