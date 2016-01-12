@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import tsp.DistanceMatrix;
 
-public class NodeArray extends ArrayList<Integer>{
+public class NodeArray extends ArrayList<Integer> implements Comparable<NodeArray> {
     ArrayList<Double> costs = new ArrayList<Double>();
     
     public NodeArray(){
@@ -18,7 +18,7 @@ public class NodeArray extends ArrayList<Integer>{
         costs.addAll(other.costs);
     }
     
-    public double getTotalCost(){
+    public Double getTotalCost(){
         Double totalCost = 0.0;
         for (Double c : costs){
             totalCost += c;
@@ -58,5 +58,10 @@ public class NodeArray extends ArrayList<Integer>{
         // Tour notInTour = CollectionUtils.substract(allNodes, tour);
         
         return notInTour;
+    }
+
+    @Override
+    public int compareTo(NodeArray o) {
+        return this.getTotalCost().compareTo(o.getTotalCost());
     }
 }

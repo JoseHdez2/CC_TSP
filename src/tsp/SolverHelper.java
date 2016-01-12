@@ -1,5 +1,8 @@
 package tsp;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 import tsp.typedef.NodeArray;
 
 /**
@@ -9,6 +12,7 @@ import tsp.typedef.NodeArray;
 public class SolverHelper {
 
     DistanceMatrix dm;
+    
     
     SolverHelper(DistanceMatrix dm){
         this.dm = dm;
@@ -66,5 +70,12 @@ public class SolverHelper {
             }
         }
         na.addNode(cuOverall, dm.get(na.getLastNode(), cuOverall));
+    }
+    
+    protected NodeArray createTour(Integer[] nodes){
+        NodeArray nt = new NodeArray(); // New tour.
+        
+        for (int i = 1; i < nodes.length; i++)
+            if (i == 0) nt.addNode(nodes[], cost);
     }
 }

@@ -1,5 +1,8 @@
 package tsp;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 import tsp.typedef.NodeArray;
 
 /**
@@ -33,5 +36,31 @@ public class Solver extends SolverHelper {
     /**
      * Step 2: Prim heuristic for getting low bounds.
      */
+    Double primHeuristic(NodeArray it){
+        // it = incomplete tour
+        
+        while(!hasAllNodes(it)){
+            addNodeClosestToAny(it);
+        }
+        
+        return it.getTotalCost();
+    }
+    
+    /**
+     * Last step: Branch and bound
+     */
+    NodeArray branchAndBound(){
+        NodeArray bestTour = nearestNeighbor(); // Initial feasible tour
 
+        NodeArray mainBranch = new NodeArray(); // what we branch off from to find optimal solution
+        mainBranch.addNode(FST_NODE, 0d);
+
+        ArrayList<NodeArray> contenders = new ArrayList<NodeArray>();
+        contenders.add(mainBranch);
+        
+        while(!contenders.isEmpty()){
+            Collections.sort(contenders);
+            NodeArray bestBranch = contenders.remove(0);
+        }
+    }
 }
