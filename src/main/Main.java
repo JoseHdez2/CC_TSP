@@ -15,8 +15,8 @@ public class Main {
         // Load problem
         ProblemInstance prob = null;
         try{
-//            prob = loadInput("samples/a280.xml");
-            prob = loadInput("samples/dummy.xml");
+            prob = loadInput("samples/a280.xml");
+//            prob = loadInput("samples/dummy.xml");
             
         } catch (Exception e) {
             e.printStackTrace(System.err);

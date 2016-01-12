@@ -3,6 +3,7 @@ package tsp;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import input.Sys;
 import typedef.DistanceMatrix;
 import typedef.NodeArray;
 
@@ -61,16 +62,23 @@ public class Solver extends SolverHelper {
         validBranches.add(createTour(ib));
         
         while(!validBranches.isEmpty()){
+            // Sort valid branches from best to worst heuristic value.
             Collections.sort(validBranches);
+            // Take best branch (smallest value) and expand it into sub-branches.
             NodeArray bestBranch = validBranches.remove(0); // Smallest heuristic was placed first.
+            Sys.fout("Expanding branch %s", bestBranch);
+            
+            // Work with each sub-branch of the newly expanded branch.
             ArrayList<NodeArray> subBranches = expandBranch(bestBranch);
             for (int i = 0; i < subBranches.size(); i++){
                 NodeArray csb = subBranches.get(i);  // csb = current sub-branch
                 Double csbh = primHeuristic(csb);  // csbh = csb heuristic value
+                
                 // if sub-branch heuristic exceeds top bound, discard.
                 if(csbh >= bestTourVal){
                     subBranches.remove(i); i--; continue;
                 }
+                
                 // if sub-branch is a complete tour: set as new best if applicable, then discard.
                 if(hasAllNodes(csb)){
                     // TODO: remove this line if prim is supposed to go back home.
@@ -80,7 +88,6 @@ public class Solver extends SolverHelper {
                     }
                     subBranches.remove(i);
                 }
-                // TODO: if sub-branch (or complete tour?) has a twist, apply 2-opt
                 
                 // otherwise, just leave the sub-branch alone.
             }

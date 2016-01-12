@@ -3,6 +3,7 @@ package tsp;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import input.Sys;
 import typedef.DistanceMatrix;
 import typedef.NodeArray;
 
@@ -65,6 +66,7 @@ public class SolverHelper {
         Integer cuOverall = null;   // "Closest unvisited overall" overall = to any node.
         Double cuOverallDist = Double.MAX_VALUE;
         for (int i = 0; i < dm.width(); i++){
+            Sys.out(i);
             Integer cuToI = findClosestUnvisited(na, i); // "Closest unvisited to i", i is current node.
             if (dm.get(i, cuToI) < cuOverallDist){
                 cuOverall = findClosestUnvisited(na, i);
