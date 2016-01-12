@@ -100,4 +100,14 @@ public class SolverHelper {
         }
         return subBranches;
     }
+    
+    // Used in 2-OPT
+    protected NodeArray twoOptSwap(NodeArray na, int i, int k){
+        NodeArray nna = new NodeArray();
+        nna.addNode(na.get(0), 0d);
+        for(int n = 1; n <= i-1; n++) nna.addNode(na.get(n), dm.get(nna.getLastNode(), na.get(n)));
+        for(int n = k; n >= i; n--) nna.addNode(na.get(n), dm.get(nna.getLastNode(), na.get(n)));
+        for(int n = k+1; n < na.size(); n++) nna.addNode(na.get(n), dm.get(nna.getLastNode(), na.get(n)));
+        return nna;
+    }
 }

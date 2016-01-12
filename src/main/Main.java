@@ -1,6 +1,8 @@
 package main;
 
+import java.io.Console;
 import java.io.File;
+import java.util.Scanner;
 
 import input.ProblemInstance;
 import input.Sys;
@@ -14,8 +16,14 @@ public class Main {
         
         // Load problem
         ProblemInstance prob = null;
+
+        Console console = System.console();
         try{
-            prob = loadInput("samples/a280.xml");
+//            String str = console.readLine("Load file: samples/");
+            System.out.print("Load file: samples/");
+            Scanner keyboard = new Scanner(System.in);
+            String str = keyboard.nextLine();
+            prob = loadInput("samples/" + str);
 //            prob = loadInput("samples/dummy.xml");
             
         } catch (Exception e) {
@@ -31,6 +39,13 @@ public class Main {
         // Show result
         Sys.fout("El mejor tour es %s", bestTour);
         Sys.fout("La distancia minima es %f", bestTour.getTotalCost());
+        
+        // Optimize problem
+        NodeArray optBestTour = s.optimize(bestTour);
+        
+        // Show result optimization
+        Sys.fout("El mejor tour es %s", optBestTour);
+        Sys.fout("La distancia minima es %f", optBestTour.getTotalCost());
     }
     
     public static ProblemInstance loadInput(String inputFilePath) throws Exception{

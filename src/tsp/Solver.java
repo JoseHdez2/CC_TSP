@@ -40,17 +40,13 @@ public class Solver extends SolverHelper {
      */
     Double primHeuristic(NodeArray it){
         // it = incomplete tour
+        NodeArray itCopy = new NodeArray(it);
         
-        while(!hasAllNodes(it)){
-            addNodeClosestToAny(it);
-            System.out.println(it.size());
-            if (it.size() > 279) {
-                System.out.println("test");
-                continue;
-            }
+        while(!hasAllNodes(itCopy)){
+            addNodeClosestToAny(itCopy);
         }
         
-        return it.getTotalCost();
+        return itCopy.getTotalCost();
     }
     
     /**
@@ -78,20 +74,27 @@ public class Solver extends SolverHelper {
             for (int i = 0; i < subBranches.size(); i++){
                 NodeArray csb = subBranches.get(i);  // csb = current sub-branch
                 Double csbh = primHeuristic(csb);  // csbh = csb heuristic value
+                String str = String.format("Checking %s (prim=%f) ...", csb, csbh);
                 
                 // if sub-branch heuristic exceeds top bound, discard.
                 if(csbh >= bestTourVal){
+                    str += String.format(" >= %f (best); branch discarded", bestTourVal); Sys.out(str);
                     subBranches.remove(i); i--; continue;
                 }
                 
                 // if sub-branch is a complete tour: set as new best if applicable, then discard.
-                if(hasAllNodes(csb)){
+                else if(hasAllNodes(csb)){
+                    str += String.format("has all nodes...");
                     // TODO: remove this line if prim is supposed to go back home.
                     csb.addNode(csb.getLastNode(), dm.get(csb.getLastNode(), FST_NODE));
                     if(csb.getTotalCost() < bestTourVal){
+                        str += String.format("%f (cur) < %f (best); new best tour!", bestTourVal); 
+                        str += "-----------------------------------------------"; Sys.out(str);
                         bestTour = csb; bestTourVal = csb.getTotalCost();
                     }
-                    subBranches.remove(i);
+                    subBranches.remove(i); i--; continue;
+                } else {
+                    str += String.format("< %f (best); valid branch.", bestTourVal); Sys.out(str);
                 }
                 
                 // otherwise, just leave the sub-branch alone.
@@ -103,8 +106,44 @@ public class Solver extends SolverHelper {
         return bestTour;
     }
     
+    /**
+     * Extra step: optimize solution with 2-opt
+     */
+    public NodeArray twoOpt(NodeArray na){
+        NodeArray nna = new NodeArray(na); 
+        Sys.fout("%s [dist = %f] ",nna,nna.getTotalCost());
+        boolean improvement;
+        do {
+            improvement = false;
+            double bestDist = nna.getTotalCost();
+            
+            for (int i = 1; i < nna.size()-3; i++){
+                for (int k = i+1; k < nna.size()-2; k++){
+                    NodeArray swapped = twoOptSwap(nna, i, k);
+                    double newDist = swapped.getTotalCost();
+                    
+                    if (newDist < bestDist){
+                        nna = swapped;
+                        improvement = true;
+                        Sys.fout("(i=%d,k=%d) %s [dist = %f] (mejora)",i,k,swapped,newDist);
+                    } else {
+                        Sys.fout("(i=%d,k=%d) %s [dist = %f] (no mejora)",i,k,swapped,newDist);
+                    }
+                    if(improvement) break;
+                }
+                if(improvement) break;
+            }
+            
+        } while(improvement);
+        
+        return nna;
+    }
+    
     public NodeArray solve(){
         return branchAndBound();
     }
+    
+    public NodeArray optimize(NodeArray na){
+        return twoOpt(na);
+    }
 }
-//TODO: if sub-branch (or complete tour?) has a twist, apply 2-opt
