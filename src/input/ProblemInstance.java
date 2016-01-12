@@ -1,4 +1,4 @@
-package tsp;
+package input;
 
 import java.io.File;
 
@@ -9,8 +9,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import input.MyXML;
-import input.Sys;
 import typedef.DistanceMatrix;
 
 public class ProblemInstance {

@@ -2,8 +2,8 @@ package main;
 
 import java.io.File;
 
+import input.ProblemInstance;
 import input.Sys;
-import tsp.ProblemInstance;
 import tsp.Solver;
 
 public class Main {
