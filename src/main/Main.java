@@ -5,6 +5,7 @@ import java.io.File;
 import input.ProblemInstance;
 import input.Sys;
 import tsp.Solver;
+import typedef.NodeArray;
 
 public class Main {
     
@@ -23,10 +24,10 @@ public class Main {
         
         // Solve problem
         Solver s = new Solver(prob.getDistanceMatrix());
-        s.solve();
+        NodeArray bestTour = s.solve();
         
         // Show result
-        
+        Sys.fout("La distancia minima es %f", bestTour.getTotalCost());
     }
     
     public static ProblemInstance loadInput(String inputFilePath) throws Exception{

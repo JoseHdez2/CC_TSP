@@ -26,7 +26,9 @@ public class SolverHelper {
         
         // Discard those not in tour.
         NodeArray unvisited = new NodeArray(allNodes);
-        for (int i = 0; i < na.size(); i++){ unvisited.remove(i); i--; }
+        
+        for (int i = 0; i < na.size(); i++)
+            if(unvisited.contains(na.get(i))) unvisited.remove(na.get(i));
         
         return unvisited;
     }

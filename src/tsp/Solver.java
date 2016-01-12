@@ -91,8 +91,8 @@ public class Solver extends SolverHelper {
         return bestTour;
     }
     
-    public void solve(){
-        branchAndBound();
+    public NodeArray solve(){
+        return branchAndBound();
     }
 }
 //TODO: if sub-branch (or complete tour?) has a twist, apply 2-opt
