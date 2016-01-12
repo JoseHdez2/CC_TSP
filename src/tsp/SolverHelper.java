@@ -13,7 +13,6 @@ public class SolverHelper {
 
     DistanceMatrix dm;
     
-    
     SolverHelper(DistanceMatrix dm){
         this.dm = dm;
     }
@@ -72,10 +71,26 @@ public class SolverHelper {
         na.addNode(cuOverall, dm.get(na.getLastNode(), cuOverall));
     }
     
+    // Used in branch and bound to create initial branch
     protected NodeArray createTour(Integer[] nodes){
         NodeArray nt = new NodeArray(); // New tour.
-        
+        nt.addNode(nodes[0], 0d);
         for (int i = 1; i < nodes.length; i++)
-            if (i == 0) nt.addNode(nodes[], cost);
+            nt.addNode(nodes[i], dm.get(nodes[i-1], nodes[i]));
+        return nt;
+    }
+    
+    // Used in branch and bound
+    protected ArrayList<NodeArray> expandBranch(NodeArray branch){
+        NodeArray unvisited = unvisitedNodes(branch);
+        ArrayList<NodeArray> subBranches = new ArrayList<NodeArray>();
+        
+        // Each subbranch is the branch with a different unvisited node added at the end.
+        for(Integer un : unvisited){
+            NodeArray sb = new NodeArray(branch);   // sb = sub branch
+            sb.add(un); // un = unvisited node. a different one for each sub branch.
+            subBranches.add(sb);
+        }
+        return subBranches;
     }
 }

@@ -52,15 +52,17 @@ public class Solver extends SolverHelper {
     NodeArray branchAndBound(){
         NodeArray bestTour = nearestNeighbor(); // Initial feasible tour
 
-        NodeArray mainBranch = new NodeArray(); // what we branch off from to find optimal solution
-        mainBranch.addNode(FST_NODE, 0d);
-
-        ArrayList<NodeArray> contenders = new ArrayList<NodeArray>();
-        contenders.add(mainBranch);
+        Integer[] ib = {FST_NODE}; // initial branch: what we branch off from to find optimal solution.
+        ArrayList<NodeArray> validBranches = new ArrayList<NodeArray>();
+        validBranches.add(createTour(ib));
         
-        while(!contenders.isEmpty()){
-            Collections.sort(contenders);
-            NodeArray bestBranch = contenders.remove(0);
+        while(!validBranches.isEmpty()){
+            Collections.sort(validBranches);
+            NodeArray bestBranch = validBranches.remove(0);
+            ArrayList<NodeArray> subBranches = expandBranch(bestBranch);
+            for (int i = 0; i < subBranches.size(); i++){
+                if()
+            }
         }
     }
 }
