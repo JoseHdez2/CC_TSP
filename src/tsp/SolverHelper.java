@@ -88,10 +88,10 @@ public class SolverHelper {
         NodeArray unvisited = unvisitedNodes(branch);
         ArrayList<NodeArray> subBranches = new ArrayList<NodeArray>();
         
-        // Each subbranch is the branch with a different unvisited node added at the end.
+        // Each subbranch is the parent branch with a different unvisited node (un) added at the end.
         for(Integer un : unvisited){
             NodeArray sb = new NodeArray(branch);   // sb = sub branch
-            sb.add(un); // un = unvisited node. a different one for each sub branch.
+            sb.addNode(un, dm.get(sb.getLastNode(), un));
             subBranches.add(sb);
         }
         return subBranches;

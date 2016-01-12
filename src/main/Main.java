@@ -27,6 +27,7 @@ public class Main {
         NodeArray bestTour = s.solve();
         
         // Show result
+        Sys.fout("El mejor tour es %s", bestTour);
         Sys.fout("La distancia minima es %f", bestTour.getTotalCost());
     }
     
