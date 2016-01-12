@@ -3,7 +3,8 @@ package tsp;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import tsp.typedef.NodeArray;
+import typedef.DistanceMatrix;
+import typedef.NodeArray;
 
 /**
  * @author jose
@@ -25,7 +26,7 @@ public class SolverHelper {
         
         // Discard those not in tour.
         NodeArray unvisited = new NodeArray(allNodes);
-        for (int i = 0; i < na.size(); i++) unvisited.remove(i);
+        for (int i = 0; i < na.size(); i++){ unvisited.remove(i); i--; }
         
         return unvisited;
     }

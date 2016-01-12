@@ -1,8 +1,6 @@
-package tsp.typedef;
+package typedef;
 
 import java.util.ArrayList;
-
-import tsp.DistanceMatrix;
 
 public class NodeArray extends ArrayList<Integer> implements Comparable<NodeArray> {
     ArrayList<Double> costs = new ArrayList<Double>();

@@ -9,8 +9,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import util.MyXML;
-import util.Sys;
+import input.MyXML;
+import input.Sys;
+import typedef.DistanceMatrix;
 
 public class ProblemInstance {
    

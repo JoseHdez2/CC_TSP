@@ -1,4 +1,4 @@
-package tsp;
+package typedef;
 
 public class DistanceMatrix {
     double[][] distances;

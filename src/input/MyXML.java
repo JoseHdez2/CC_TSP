@@ -1,4 +1,4 @@
-package util;
+package input;
 
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;

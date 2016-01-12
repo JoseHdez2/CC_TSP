@@ -1,4 +1,4 @@
-package util;
+package input;
 
 public abstract class Sys {
     
